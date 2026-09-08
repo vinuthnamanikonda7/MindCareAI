@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Profile - MindCare AI</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+
+</head>
+
+<body class="dashboard-body">
+
+<header class="dashboard-navbar">
+
+    <div class="logo">
+        🧠 MindCare AI
+    </div>
+
+    <div class="user-menu">
+
+        <span id="userName">
+            User
+        </span>
+
+        <button onclick="logout()" class="logout-btn">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <a href="dashboard.html">
+            📊 Dashboard
+        </a>
+
+        <a href="mood.html">
+            📝 Mood Journal
+        </a>
+
+        <a href="chatbot.html">
+            💬 AI Chatbot
+        </a>
+
+        <a href="profile.html" class="active">
+            👤 Profile
+        </a>
+
+    </aside>
+
+    <main class="dashboard-content">
+
+        <div class="dashboard-heading">
+
+            <div>
+
+                <span class="badge">
+                    MY ACCOUNT
+                </span>
+
+                <h1>
+                    My Profile
+                </h1>
+
+            </div>
+
+        </div>
+
+        <div class="profile-card">
+
+            <div class="profile-avatar">
+                👤
+            </div>
+
+            <h2 id="profileName">
+                User
+            </h2>
+
+            <p id="profileEmail">
+                user@example.com
+            </p>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <h2>Personal Information</h2>
+
+            <div class="profile-details">
+
+                <div>
+                    <label>Full Name</label>
+                    <p id="nameField">--</p>
+                </div>
+
+                <div>
+                    <label>Email</label>
+                    <p id="emailField">--</p>
+                </div>
+
+                <div>
+                    <label>Account Status</label>
+                    <p class="status-active">
+                        ● Active
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="dashboard-card privacy-card">
+
+            <h2>🔐 Privacy & Security</h2>
+
+            <p>
+                Your mental wellness information is sensitive.
+                MindCare AI is designed to keep your personal
+                information secure and private.
+            </p>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+const user = JSON.parse(
+    localStorage.getItem("mindcareUser")
+);
+
+if (user) {
+
+    document.getElementById("userName").textContent =
+        user.name || "User";
+
+    document.getElementById("profileName").textContent =
+        user.name || "User";
+
+    document.getElementById("profileEmail").textContent =
+        user.email || "";
+
+    document.getElementById("nameField").textContent =
+        user.name || "--";
+
+    document.getElementById("emailField").textContent =
+        user.email || "--";
+}
+
+function logout() {
+
+    localStorage.removeItem("mindcareToken");
+    localStorage.removeItem("mindcareUser");
+
+    window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>

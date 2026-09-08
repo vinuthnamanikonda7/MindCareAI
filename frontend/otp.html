@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        MindCare AI - Verify Email
+    </title>
+
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8f7ff,
+                    #f2f0ff
+                );
+
+            font-family: Arial, sans-serif;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 30px;
+        }
+
+
+        .container {
+
+            width: 100%;
+
+            max-width: 590px;
+        }
+
+
+        .logo {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .logo h1 {
+
+            color: #6254ff;
+
+            font-size: 32px;
+
+            font-weight: 700;
+        }
+
+
+        .card {
+
+            background: white;
+
+            padding: 70px 50px 50px;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0, 0, 0, 0.08);
+
+            text-align: center;
+        }
+
+
+        .email-icon {
+
+            font-size: 48px;
+
+            margin-bottom: 25px;
+        }
+
+
+        h2 {
+
+            font-size: 32px;
+
+            color: #111;
+
+            margin-bottom: 15px;
+        }
+
+
+        .subtitle {
+
+            color: #666;
+
+            font-size: 18px;
+
+            line-height: 1.6;
+
+            margin-bottom: 35px;
+        }
+
+
+        .email-display {
+
+            font-weight: bold;
+
+            color: #6254ff;
+
+            margin-top: -20px;
+
+            margin-bottom: 25px;
+
+            word-break: break-word;
+        }
+
+
+        .otp-container {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .otp-input {
+
+            width: 60px;
+
+            height: 70px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            outline: none;
+        }
+
+
+        .otp-input:focus {
+
+            border-color: #6254ff;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(98, 84, 255, 0.1);
+        }
+
+
+        .verify-btn {
+
+            width: 100%;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #6254ff;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .verify-btn:hover {
+
+            background: #5144e8;
+        }
+
+
+        .verify-btn:disabled {
+
+            background: #aaa;
+
+            cursor: not-allowed;
+        }
+
+
+        .resend {
+
+            margin-top: 25px;
+
+            color: #666;
+
+            font-size: 16px;
+        }
+
+
+        .resend button {
+
+            border: none;
+
+            background: transparent;
+
+            color: #6254ff;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .resend button:disabled {
+
+            color: #999;
+
+            cursor: not-allowed;
+        }
+
+
+        .back {
+
+            margin-top: 30px;
+        }
+
+
+        .back a {
+
+            color: #6254ff;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            font-size: 17px;
+        }
+
+
+        .message {
+
+            margin-top: 15px;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+        }
+
+
+        .error {
+
+            color: #d93025;
+        }
+
+
+        .success {
+
+            color: #188038;
+        }
+
+
+        .timer {
+
+            margin-top: 10px;
+
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .card {
+
+                padding:
+                    50px 20px 40px;
+            }
+
+
+            .otp-container {
+
+                gap: 6px;
+            }
+
+
+            .otp-input {
+
+                width: 45px;
+
+                height: 55px;
+
+                font-size: 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="logo">
+
+        <h1>
+            🧠 MindCare AI
+        </h1>
+
+    </div>
+
+
+    <div class="card">
+
+
+        <div class="email-icon">
+            ✉️
+        </div>
+
+
+        <h2>
+            Verify Your Email
+        </h2>
+
+
+        <p class="subtitle">
+
+            Enter the 6-digit verification
+            code sent to your email address.
+
+        </p>
+
+
+        <div
+            id="emailDisplay"
+            class="email-display"
+        ></div>
+
+
+        <div
+            class="otp-container"
+            id="otpForm"
+        >
+
+
+            <input
+                type="text"
+                id="otp1"
+                name="otp1"
+                class="otp-input"
+                maxlength="1"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                autofocus
+                aria-label="OTP digit 1"
+            >
+
+
+            <input
+                type="text"
+                id="otp2"
+                name="otp2"
+                class="otp-input"
+                maxlength="1"
+                inputmode="numeric"
+                aria-label="OTP digit 2"
+            >
+
+
+            <input
+                type="text"
+                id="otp3"
+                name="otp3"
+                class="otp-input"
+                maxlength="1"
+                inputmode="numeric"
+                aria-label="OTP digit 3"
+            >
+
+
+            <input
+                type="text"
+                id="otp4"
+                name="otp4"
+                class="otp-input"
+                maxlength="1"
+                inputmode="numeric"
+                aria-label="OTP digit 4"
+            >
+
+
+            <input
+                type="text"
+                id="otp5"
+                name="otp5"
+                class="otp-input"
+                maxlength="1"
+                inputmode="numeric"
+                aria-label="OTP digit 5"
+            >
+
+
+            <input
+                type="text"
+                id="otp6"
+                name="otp6"
+                class="otp-input"
+                maxlength="1"
+                inputmode="numeric"
+                aria-label="OTP digit 6"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            id="verifyBtn"
+            class="verify-btn"
+        >
+            Verify Email
+        </button>
+
+
+        <div class="resend">
+
+            Didn't receive the code?
+
+            <button
+                type="button"
+                id="resendBtn"
+            >
+                Resend OTP
+            </button>
+
+        </div>
+
+
+        <div
+            id="timer"
+            class="timer"
+        ></div>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <div class="back">
+
+            <a href="register.html">
+                ← Back to Registration
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script src="./js/otp.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MindCare AI - Mood</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f7f5ff, #eef2ff);
+            min-height: 100vh;
+            color: #222;
+        }
+
+        .navbar {
+            background: white;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6257ff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: #eeeaff;
+            color: #6257ff;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(70,60,120,0.08);
+        }
+
+        .page-header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .page-header p {
+            color: #777;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(70,60,120,0.08);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .mood-option {
+            border: 2px solid #eee;
+            background: white;
+            border-radius: 15px;
+            padding: 18px 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .mood-option:hover {
+            border-color: #6257ff;
+            transform: translateY(-2px);
+        }
+
+        .mood-option.selected {
+            border-color: #6257ff;
+            background: #f0edff;
+        }
+
+        .mood-emoji {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .mood-name {
+            font-weight: 600;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #6257ff;
+            box-shadow: 0 0 0 3px rgba(98,87,255,0.1);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            margin-top: 18px;
+            border: none;
+            border-radius: 12px;
+            background: #6257ff;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .analyze-btn:hover {
+            background: #5147e8;
+        }
+
+        .analyze-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: #f5f3ff;
+            border-radius: 15px;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e2f5;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            min-height: 22px;
+            font-weight: 600;
+        }
+
+        .success {
+            color: #198754;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+
+        .history-item {
+            border-left: 4px solid #6257ff;
+            background: #faf9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .history-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .history-mood {
+            font-weight: 700;
+        }
+
+        .history-date {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .history-text {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .empty {
+            text-align: center;
+            color: #888;
+            padding: 25px;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 0 4%;
+            }
+
+            .nav-links a {
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            .mood-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                width: 94%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="dashboard.html" class="brand">🧠 MindCare AI</a>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Home</a>
+        <a href="mood.html" class="active">Mood</a>
+        <a href="chatbot.html">Chat</a>
+        <a href="profile.html">Profile</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="page-header">
+        <h1>How are you feeling today?</h1>
+        <p>
+            Record your mood and journal. MindCare AI will analyze
+            your emotional state and save your progress.
+        </p>
+    </section>
+
+    <section class="card">
+
+        <h2>Select Your Mood</h2>
+
+        <div class="mood-grid">
+
+    <button type="button" class="mood-option" data-mood="Happy">
+        <span class="mood-emoji">😊</span>
+        <span class="mood-name">Happy</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Excited">
+        <span class="mood-emoji">🤩</span>
+        <span class="mood-name">Excited</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Calm">
+        <span class="mood-emoji">😌</span>
+        <span class="mood-name">Calm</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Loved">
+        <span class="mood-emoji">🥰</span>
+        <span class="mood-name">Loved</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Grateful">
+        <span class="mood-emoji">🙏</span>
+        <span class="mood-name">Grateful</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Confident">
+        <span class="mood-emoji">😎</span>
+        <span class="mood-name">Confident</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Neutral">
+        <span class="mood-emoji">😐</span>
+        <span class="mood-name">Neutral</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Tired">
+        <span class="mood-emoji">😴</span>
+        <span class="mood-name">Tired</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Bored">
+        <span class="mood-emoji">🥱</span>
+        <span class="mood-name">Bored</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Confused">
+        <span class="mood-emoji">😕</span>
+        <span class="mood-name">Confused</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Worried">
+        <span class="mood-emoji">😟</span>
+        <span class="mood-name">Worried</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Anxious">
+        <span class="mood-emoji">😰</span>
+        <span class="mood-name">Anxious</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Sad">
+        <span class="mood-emoji">😔</span>
+        <span class="mood-name">Sad</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Lonely">
+        <span class="mood-emoji">🥺</span>
+        <span class="mood-name">Lonely</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Angry">
+        <span class="mood-emoji">😠</span>
+        <span class="mood-name">Angry</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Stressed">
+        <span class="mood-emoji">😣</span>
+        <span class="mood-name">Stressed</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Frustrated">
+        <span class="mood-emoji">😤</span>
+        <span class="mood-name">Frustrated</span>
+    </button>
+
+    <button type="button" class="mood-option" data-mood="Overwhelmed">
+        <span class="mood-emoji">😵‍💫</span>
+        <span class="mood-name">Overwhelmed</span>
+    </button>
+
+</div>
+
+        </div>
+
+        <h2>Write About Your Day</h2>
+
+        <textarea
+            id="journalText"
+            name="journalText"
+            placeholder="Tell MindCare AI how you are feeling..."
+        ></textarea>
+
+        <button
+            type="button"
+            id="analyzeBtn"
+            class="analyze-btn"
+        >
+            Analyze & Save Mood
+        </button>
+
+        <div id="message" class="message"></div>
+
+        <div id="result" class="result">
+
+            <div class="result-row">
+                <span class="result-label">Selected Mood</span>
+                <span id="resultMood">-</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Emotion</span>
+                <span id="resultEmotion">-</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Sentiment</span>
+                <span id="resultSentiment">-</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Risk Level</span>
+                <span id="resultRisk">-</span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="card">
+
+        <h2>Your Recent Mood History</h2>
+
+        <div id="moodHistory">
+            <div class="empty">Loading your mood history...</div>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="./js/mood.js"></script>
+
+</body>
+</html>

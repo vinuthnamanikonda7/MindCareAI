@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MindCare AI - Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="./css/style.css"
+    >
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVIGATION
+     ===================================================== -->
+
+<nav class="navbar">
+
+    <a href="index.html" class="brand">
+        🧠 MindCare AI
+    </a>
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="dashboard.html" class="active">
+            Dashboard
+        </a>
+
+        <a href="mood.html">
+            Mood
+        </a>
+
+        <a href="chatbot.html">
+            Chatbot
+        </a>
+
+        <a href="profile.html">
+            Profile
+        </a>
+
+        <button
+            class="logout-btn"
+            id="logoutBtn"
+        >
+            Logout
+        </button>
+
+    </div>
+
+    <div class="user-area">
+
+        <span class="user-name" id="userName">
+            User
+        </span>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="page">
+
+    <div class="page-header">
+
+        <h1>
+            Welcome back, <span id="welcomeName">User</span> 👋
+        </h1>
+
+        <p>
+            Here's an overview of your recent emotional well-being.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         STATISTICS
+         ================================================= -->
+
+    <section class="dashboard-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                😊
+            </div>
+
+            <div class="stat-label">
+                Current Mood
+            </div>
+
+            <div
+                class="stat-value"
+                id="currentMood"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🧠
+            </div>
+
+            <div class="stat-label">
+                Emotion
+            </div>
+
+            <div
+                class="stat-value"
+                id="emotion"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💭
+            </div>
+
+            <div class="stat-label">
+                Sentiment
+            </div>
+
+            <div
+                class="stat-value"
+                id="sentiment"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🛡️
+            </div>
+
+            <div class="stat-label">
+                Risk Level
+            </div>
+
+            <div
+                class="stat-value"
+                id="riskLevel"
+            >
+                —
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         CHART + SUMMARY
+         ================================================= -->
+
+    <section class="dashboard-two-column">
+
+        <div class="card">
+
+            <div class="card-title">
+                Recent Emotional Pattern
+            </div>
+
+            <div class="card-subtitle">
+                Based on your actual recorded mood entries.
+            </div>
+
+            <div class="chart-container">
+
+                <canvas id="moodChart"></canvas>
+
+            </div>
+
+            <div
+                id="chartEmpty"
+                class="empty-state"
+                style="display:none;"
+            >
+                No mood entries available yet.
+                Start recording your mood to see your pattern.
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Mental Health Summary
+            </div>
+
+            <div class="card-subtitle">
+                Latest available analysis.
+            </div>
+
+            <p id="summaryText">
+                Loading your latest information...
+            </p>
+
+            <div
+                id="alertBox"
+                style="display:none;"
+                class="alert-box"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         QUICK ACTIONS
+         ================================================= -->
+
+    <div class="card">
+
+        <div class="card-title">
+            Quick Actions
+        </div>
+
+        <div class="quick-actions">
+
+            <a
+                href="mood.html"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+                    😊
+                </div>
+
+                <div class="quick-action-title">
+                    Track Mood
+                </div>
+
+                <div class="quick-action-text">
+                    Record how you feel today.
+                </div>
+
+            </a>
+
+
+            <a
+                href="chatbot.html"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+                    🤖
+                </div>
+
+                <div class="quick-action-title">
+                    Talk to MindCare AI
+                </div>
+
+                <div class="quick-action-text">
+                    Talk about your thoughts and feelings.
+                </div>
+
+            </a>
+
+
+            <a
+                href="profile.html"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+                    👤
+                </div>
+
+                <div class="quick-action-title">
+                    My Profile
+                </div>
+
+                <div class="quick-action-text">
+                    View and manage your account.
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- Chart.js -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js"
+></script>
+
+<script src="./js/dashboard.js"></script>
+
+</body>
+
+</html>
