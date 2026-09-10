@@ -1,14 +1,13 @@
-// ============================================
-// MindCare AI - Mood Journal
+// ============================================================
+// MindCare AI - Mood Questionnaire
 // Complete Replacement mood.js
-// ============================================
+// ============================================================
 
-console.log("MOOD.JS LOADED");
+console.log("MINDCARE MOOD.JS LOADED");
 
-
-// ============================================
+// ============================================================
 // CONFIGURATION
-// ============================================
+// ============================================================
 
 const MOOD_ANALYZE_URL =
     "http://localhost:5000/api/ai/analyze";
@@ -17,144 +16,208 @@ const MOOD_STORAGE_KEY =
     "mindcare_mood_history";
 
 
-// ============================================
-// MOODS
-// ============================================
+// ============================================================
+// MOOD QUESTION BANK
+// ============================================================
+//
+// These are screening-style questions organized by emotional
+// domain. They are NOT presented as exact questions from a
+// validated psychological scale.
+//
+// Replace/verify these with your psychologist-approved scale
+// questions before describing the questionnaire as a validated
+// clinical scale.
+// ============================================================
 
-const MOODS = [
+const QUESTION_BANK = {
+
+    Happy: [
+        "How often have you felt positive about your daily life?",
+        "How often have you felt satisfied with yourself recently?",
+        "How often have you enjoyed activities that are normally important to you?",
+        "How often have you felt hopeful about the near future?",
+        "How often have you felt emotionally balanced?"
+    ],
+
+    Excited: [
+        "How often have you recently felt energetic and enthusiastic?",
+        "How often have you looked forward to activities or events?",
+        "How often have you felt motivated to do things you enjoy?",
+        "How often have you felt unusually restless or unable to slow down?",
+        "How well have you been able to manage your excitement?"
+    ],
+
+    Calm: [
+        "How often have you felt relaxed during the day?",
+        "How often have you been able to calm yourself when something worries you?",
+        "How often have you felt comfortable with your current situation?",
+        "How often have you been able to focus without feeling overwhelmed?",
+        "How often have you felt emotionally peaceful?"
+    ],
+
+    Loved: [
+        "How often have you felt cared for by people around you?",
+        "How often have you felt emotionally connected to someone?",
+        "How comfortable are you expressing your feelings to people you trust?",
+        "How often have you felt that you belong?",
+        "How often have you received emotional support when you needed it?"
+    ],
+
+    Grateful: [
+        "How often have you noticed positive things in your life?",
+        "How often have you appreciated people who support you?",
+        "How often have you felt thankful for your current circumstances?",
+        "How often have you focused on things that are going well?",
+        "How often does gratitude improve your mood?"
+    ],
+
+    Confident: [
+        "How confident have you felt about handling your daily responsibilities?",
+        "How often have you believed that you can solve problems you face?",
+        "How often have you felt comfortable making decisions?",
+        "How often have you felt capable of dealing with challenges?",
+        "How often have you felt good about yourself?"
+    ],
+
+    Neutral: [
+        "How would you describe your emotional state during most of the day?",
+        "How often have your emotions felt stable?",
+        "How often have you felt neither particularly positive nor negative?",
+        "How well have you been managing your normal responsibilities?",
+        "How satisfied are you with your current emotional state?"
+    ],
+
+    Tired: [
+        "How often have you felt physically or mentally tired?",
+        "How often has tiredness made it difficult to complete your normal activities?",
+        "How often have you had difficulty getting enough rest?",
+        "How often have you lacked energy during the day?",
+        "How often has tiredness affected your concentration?"
+    ],
+
+    Bored: [
+        "How often have you felt uninterested in your usual activities?",
+        "How often have you struggled to find something enjoyable to do?",
+        "How often have you felt that your daily routine is repetitive?",
+        "How often have you lacked motivation to start activities?",
+        "How often have you wished you had more meaningful activities?"
+    ],
+
+    Confused: [
+        "How often have you found it difficult to make decisions?",
+        "How often have your thoughts felt unclear or disorganized?",
+        "How often have you struggled to understand what you are feeling?",
+        "How often have you found it difficult to concentrate?",
+        "How often have you felt uncertain about what to do next?"
+    ],
+
+    Worried: [
+        "How often have you found yourself worrying about different things?",
+        "How difficult has it been to control your worries?",
+        "How often have worries affected your concentration?",
+        "How often have you expected something to go wrong?",
+        "How often have your worries affected your daily activities?"
+    ],
+
+    Anxious: [
+        "How often have you felt nervous, anxious, or on edge?",
+        "How often have you found it difficult to control anxious thoughts?",
+        "How often have you felt restless or unable to relax?",
+        "How often have anxiety or nervousness affected your concentration?",
+        "How often have you avoided activities because you felt anxious?"
+    ],
+
+    Sad: [
+        "How often have you felt sad or emotionally low?",
+        "How often have you lost interest in activities you normally enjoy?",
+        "How often have you felt that everyday activities require extra effort?",
+        "How often have you felt discouraged about the future?",
+        "How often has sadness affected your daily responsibilities?"
+    ],
+
+    Lonely: [
+        "How often have you felt lonely even when other people were around?",
+        "How often have you felt that you do not have someone to talk to?",
+        "How often have you felt disconnected from people around you?",
+        "How often have you wished you had stronger social connections?",
+        "How often has loneliness affected your mood?"
+    ],
+
+    Angry: [
+        "How often have you felt easily irritated?",
+        "How often have you found it difficult to control your anger?",
+        "How often have small problems made you unusually angry?",
+        "How often has anger affected your communication with others?",
+        "How often have you regretted something you said or did while angry?"
+    ],
+
+    Stressed: [
+        "How often have you felt unable to manage everything you need to do?",
+        "How often have you felt that demands were building up around you?",
+        "How often have you found it difficult to relax because of responsibilities?",
+        "How often has stress affected your sleep or concentration?",
+        "How often have you felt that you were under too much pressure?"
+    ],
+
+    Frustrated: [
+        "How often have things not gone the way you expected?",
+        "How often have you become irritated when facing obstacles?",
+        "How difficult has it been to remain patient when problems occur?",
+        "How often has frustration affected your interactions with others?",
+        "How often have you found it difficult to move on after a frustrating event?"
+    ],
+
+    Overwhelmed: [
+        "How often have you felt that there were too many things to handle?",
+        "How often have you struggled to decide what to do first?",
+        "How often have your responsibilities felt difficult to manage?",
+        "How often have you felt mentally exhausted by your situation?",
+        "How often have you felt unable to take a break from your concerns?"
+    ]
+
+};
+
+
+// ============================================================
+// ANSWER SCALE
+// ============================================================
+
+const ANSWERS = [
     {
-        name: "Happy",
-        emoji: "😊",
-        category: "positive"
+        text: "Not at all",
+        value: 0
     },
     {
-        name: "Excited",
-        emoji: "🤩",
-        category: "positive"
+        text: "Several days / Rarely",
+        value: 1
     },
     {
-        name: "Calm",
-        emoji: "😌",
-        category: "positive"
+        text: "More than half the days / Sometimes",
+        value: 2
     },
     {
-        name: "Grateful",
-        emoji: "🙏",
-        category: "positive"
-    },
-    {
-        name: "Loved",
-        emoji: "🥰",
-        category: "positive"
-    },
-    {
-        name: "Confident",
-        emoji: "😎",
-        category: "positive"
-    },
-    {
-        name: "Hopeful",
-        emoji: "🌈",
-        category: "positive"
-    },
-    {
-        name: "Motivated",
-        emoji: "💪",
-        category: "positive"
-    },
-    {
-        name: "Peaceful",
-        emoji: "🕊️",
-        category: "positive"
-    },
-    {
-        name: "Sad",
-        emoji: "😢",
-        category: "negative"
-    },
-    {
-        name: "Lonely",
-        emoji: "🥺",
-        category: "negative"
-    },
-    {
-        name: "Angry",
-        emoji: "😠",
-        category: "negative"
-    },
-    {
-        name: "Stressed",
-        emoji: "😣",
-        category: "negative"
-    },
-    {
-        name: "Frustrated",
-        emoji: "😤",
-        category: "negative"
-    },
-    {
-        name: "Overwhelmed",
-        emoji: "🥴",
-        category: "negative"
-    },
-    {
-        name: "Scared",
-        emoji: "😨",
-        category: "negative"
-    },
-    {
-        name: "Anxious",
-        emoji: "😰",
-        category: "negative"
-    },
-    {
-        name: "Worried",
-        emoji: "😟",
-        category: "negative"
-    },
-    {
-        name: "Confused",
-        emoji: "😕",
-        category: "neutral"
-    },
-    {
-        name: "Bored",
-        emoji: "😐",
-        category: "neutral"
-    },
-    {
-        name: "Tired",
-        emoji: "😴",
-        category: "negative"
-    },
-    {
-        name: "Nervous",
-        emoji: "😬",
-        category: "negative"
-    },
-    {
-        name: "Disappointed",
-        emoji: "😞",
-        category: "negative"
-    },
-    {
-        name: "Hopeful",
-        emoji: "🌱",
-        category: "positive"
+        text: "Nearly every day / Often",
+        value: 3
     }
 ];
 
 
-// ============================================
-// SELECTED MOOD
-// ============================================
+// ============================================================
+// VARIABLES
+// ============================================================
 
 let selectedMood = "";
 
+let currentQuestion = 0;
 
-// ============================================
-// GET TOKEN
-// ============================================
+let questionAnswers = [];
+
+let currentQuestions = [];
+
+
+// ============================================================
+// TOKEN
+// ============================================================
 
 function getToken() {
 
@@ -169,9 +232,689 @@ function getToken() {
 }
 
 
-// ============================================
-// LOCAL STORAGE
-// ============================================
+// ============================================================
+// DOM HELPERS
+// ============================================================
+
+function getElement(id) {
+    return document.getElementById(id);
+}
+
+
+// ============================================================
+// STATUS
+// ============================================================
+
+function showStatus(message, type = "info") {
+
+    const element = getElement("message");
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent = message;
+
+    element.className = "message";
+
+    if (type === "success") {
+        element.classList.add("success");
+    }
+
+    if (type === "error") {
+        element.classList.add("error");
+    }
+
+}
+
+
+// ============================================================
+// ESCAPE HTML
+// ============================================================
+
+function escapeHTML(value) {
+
+    const div = document.createElement("div");
+
+    div.textContent = String(value ?? "");
+
+    return div.innerHTML;
+
+}
+
+
+// ============================================================
+// SELECT MOOD
+// ============================================================
+
+function selectMood(element) {
+
+    const cards =
+        document.querySelectorAll("[data-mood]");
+
+    cards.forEach(card => {
+        card.classList.remove("selected");
+    });
+
+    element.classList.add("selected");
+
+    selectedMood =
+        element.dataset.mood;
+
+    console.log(
+        "SELECTED MOOD:",
+        selectedMood
+    );
+
+    startQuestionnaire(selectedMood);
+
+}
+
+
+// ============================================================
+// SETUP MOOD CARDS
+// ============================================================
+
+function setupMoodCards() {
+
+    const cards =
+        document.querySelectorAll("[data-mood]");
+
+    console.log(
+        "MOOD CARDS FOUND:",
+        cards.length
+    );
+
+    cards.forEach(card => {
+
+        card.addEventListener(
+            "click",
+            function() {
+
+                selectMood(this);
+
+            }
+        );
+
+    });
+
+}
+
+
+// ============================================================
+// START QUESTIONNAIRE
+// ============================================================
+
+function startQuestionnaire(mood) {
+
+    currentQuestions =
+        QUESTION_BANK[mood] ||
+        QUESTION_BANK.Neutral;
+
+    currentQuestion = 0;
+
+    questionAnswers =
+        new Array(
+            currentQuestions.length
+        ).fill(null);
+
+    const questionnaire =
+        getElement("questionnaire");
+
+    const journalSection =
+        getElement("journalSection");
+
+    questionnaire.classList.add("show");
+
+    journalSection.classList.remove("show");
+
+    getElement("questionnaireTitle")
+        .textContent =
+        `Let's understand your ${mood.toLowerCase()} mood`;
+
+    renderQuestion();
+
+    questionnaire.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+// ============================================================
+// RENDER QUESTION
+// ============================================================
+
+function renderQuestion() {
+
+    const total =
+        currentQuestions.length;
+
+    const question =
+        currentQuestions[currentQuestion];
+
+    getElement("questionNumber")
+        .textContent =
+        `QUESTION ${currentQuestion + 1}`;
+
+    getElement("questionCount")
+        .textContent =
+        `Question ${currentQuestion + 1} of ${total}`;
+
+    getElement("questionText")
+        .textContent =
+        question;
+
+    const progress =
+        ((currentQuestion + 1) / total) * 100;
+
+    getElement("progressBar")
+        .style.width =
+        `${progress}%`;
+
+    const answerContainer =
+        getElement("answerOptions");
+
+    answerContainer.innerHTML = "";
+
+    ANSWERS.forEach((answer, index) => {
+
+        const label =
+            document.createElement("label");
+
+        label.className =
+            "answer-option";
+
+        if (
+            questionAnswers[currentQuestion] ===
+            answer.value
+        ) {
+            label.classList.add("selected");
+        }
+
+        label.innerHTML = `
+            <input
+                type="radio"
+                name="questionAnswer"
+                value="${answer.value}"
+                ${questionAnswers[currentQuestion] === answer.value ? "checked" : ""}
+            >
+
+            <span>
+                ${escapeHTML(answer.text)}
+            </span>
+        `;
+
+        const radio =
+            label.querySelector("input");
+
+        radio.addEventListener(
+            "change",
+            function() {
+
+                questionAnswers[currentQuestion] =
+                    Number(this.value);
+
+                document
+                    .querySelectorAll(".answer-option")
+                    .forEach(option => {
+                        option.classList.remove(
+                            "selected"
+                        );
+                    });
+
+                label.classList.add("selected");
+
+            }
+        );
+
+        answerContainer.appendChild(label);
+
+    });
+
+    const previousBtn =
+        getElement("previousBtn");
+
+    const nextBtn =
+        getElement("nextBtn");
+
+    if (currentQuestion === 0) {
+
+        previousBtn.style.visibility =
+            "hidden";
+
+    } else {
+
+        previousBtn.style.visibility =
+            "visible";
+
+    }
+
+    if (
+        currentQuestion ===
+        total - 1
+    ) {
+
+        nextBtn.textContent =
+            "Finish Questions ✓";
+
+    } else {
+
+        nextBtn.textContent =
+            "Next →";
+
+    }
+
+}
+
+
+// ============================================================
+// NEXT QUESTION
+// ============================================================
+
+function nextQuestion() {
+
+    if (
+        questionAnswers[currentQuestion] ===
+        null
+    ) {
+
+        alert(
+            "Please select an answer before continuing."
+        );
+
+        return;
+
+    }
+
+    if (
+        currentQuestion <
+        currentQuestions.length - 1
+    ) {
+
+        currentQuestion++;
+
+        renderQuestion();
+
+        return;
+
+    }
+
+    finishQuestionnaire();
+
+}
+
+
+// ============================================================
+// PREVIOUS QUESTION
+// ============================================================
+
+function previousQuestion() {
+
+    if (currentQuestion <= 0) {
+        return;
+    }
+
+    currentQuestion--;
+
+    renderQuestion();
+
+}
+
+
+// ============================================================
+// FINISH QUESTIONNAIRE
+// ============================================================
+
+function finishQuestionnaire() {
+
+    console.log(
+        "QUESTIONNAIRE ANSWERS:",
+        questionAnswers
+    );
+
+    const questionnaire =
+        getElement("questionnaire");
+
+    const journalSection =
+        getElement("journalSection");
+
+    questionnaire.classList.remove("show");
+
+    journalSection.classList.add("show");
+
+    journalSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+    showStatus(
+        "Questions completed. You can now tell us more about your day.",
+        "success"
+    );
+
+}
+
+
+// ============================================================
+// CALCULATE SCORE
+// ============================================================
+
+function calculateScore() {
+
+    return questionAnswers.reduce(
+        (total, value) => {
+
+            return total +
+                (Number(value) || 0);
+
+        },
+        0
+    );
+
+}
+
+
+// ============================================================
+// CALCULATE WELLNESS LEVEL
+// ============================================================
+
+function calculateWellnessLevel() {
+
+    const score =
+        calculateScore();
+
+    const maximum =
+        currentQuestions.length * 3;
+
+    const percentage =
+        maximum === 0
+            ? 0
+            : (score / maximum) * 100;
+
+
+    /*
+        This is a project-level screening indicator,
+        NOT a clinical diagnostic scale.
+    */
+
+    if (percentage <= 25) {
+
+        return {
+            level: "Low",
+            className: "risk-low"
+        };
+
+    }
+
+    if (percentage <= 50) {
+
+        return {
+            level: "Moderate",
+            className: "risk-moderate"
+        };
+
+    }
+
+    if (percentage <= 75) {
+
+        return {
+            level: "High",
+            className: "risk-high"
+        };
+
+    }
+
+    return {
+        level: "Critical",
+        className: "risk-critical"
+    };
+
+}
+
+
+// ============================================================
+// JOURNAL ELEMENT
+// ============================================================
+
+function getJournalElement() {
+
+    return (
+        getElement("journalText") ||
+        getElement("journalEntry") ||
+        getElement("moodText") ||
+        document.querySelector("textarea")
+    );
+
+}
+
+
+// ============================================================
+// AI ANALYSIS
+// ============================================================
+
+async function analyzeMoodWithAI(
+    mood,
+    journalText
+) {
+
+    const token =
+        getToken();
+
+    const score =
+        calculateScore();
+
+    const wellness =
+        calculateWellnessLevel();
+
+    const headers = {
+        "Content-Type":
+            "application/json"
+    };
+
+    if (token) {
+
+        headers.Authorization =
+            "Bearer " + token;
+
+    }
+
+    const response =
+        await fetch(
+            MOOD_ANALYZE_URL,
+            {
+                method: "POST",
+
+                headers: headers,
+
+                body: JSON.stringify({
+
+                    mood: mood,
+
+                    text: journalText,
+
+                    journal: journalText,
+
+                    journalText: journalText,
+
+                    questionnaireAnswers:
+                        questionAnswers,
+
+                    questionnaireQuestions:
+                        currentQuestions,
+
+                    questionnaireScore:
+                        score,
+
+                    wellnessLevel:
+                        wellness.level
+
+                })
+            }
+        );
+
+
+    console.log(
+        "AI RESPONSE STATUS:",
+        response.status
+    );
+
+
+    if (!response.ok) {
+
+        const errorText =
+            await response.text();
+
+        console.error(
+            "AI SERVER ERROR:",
+            errorText
+        );
+
+        throw new Error(
+            "AI analysis failed: " +
+            response.status
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+    console.log(
+        "AI DATA:",
+        data
+    );
+
+    return data;
+
+}
+
+
+// ============================================================
+// FALLBACK ANALYSIS
+// ============================================================
+
+function createFallbackAnalysis(
+    mood,
+    wellness
+) {
+
+    const messages = {
+
+        Happy:
+            "Your responses suggest positive emotional wellbeing. Continue activities that make you feel happy and connected.",
+
+        Excited:
+            "You appear to be experiencing positive energy and enthusiasm. Remember to maintain a healthy balance between activity and rest.",
+
+        Calm:
+            "Your responses suggest a relatively calm emotional state. Continue using activities that help you relax.",
+
+        Loved:
+            "Your responses indicate that connection and emotional support may be positive parts of your current wellbeing.",
+
+        Grateful:
+            "Your responses suggest positive reflection and appreciation. Continuing gratitude activities may support your wellbeing.",
+
+        Confident:
+            "Your responses suggest positive self-confidence. Continue setting realistic goals and recognizing your achievements.",
+
+        Neutral:
+            "Your responses suggest a relatively neutral emotional state. Continue checking in with yourself regularly.",
+
+        Tired:
+            "Your responses suggest that tiredness may be affecting your wellbeing. Consider rest, regular sleep and manageable daily activities.",
+
+        Bored:
+            "Your responses suggest reduced interest or motivation. Try introducing small meaningful or enjoyable activities into your routine.",
+
+        Confused:
+            "Your responses suggest some uncertainty or difficulty organizing thoughts. Taking one small step at a time may help.",
+
+        Worried:
+            "Your responses suggest that worry may be affecting you. Slow breathing, writing down concerns and talking to someone you trust may help.",
+
+        Anxious:
+            "Your responses suggest that anxiety may be affecting your wellbeing. Consider calming activities and speaking with someone you trust.",
+
+        Sad:
+            "Your responses suggest that you may be experiencing sadness. Consider connecting with someone you trust and giving yourself time to process your feelings.",
+
+        Lonely:
+            "Your responses suggest feelings of loneliness. Reaching out to a trusted friend, family member or supportive person may help.",
+
+        Angry:
+            "Your responses suggest that anger or irritation may be affecting you. Taking a pause before reacting can help create space to respond calmly.",
+
+        Stressed:
+            "Your responses suggest that stress may be affecting your wellbeing. Breaking responsibilities into smaller tasks and taking short breaks may help.",
+
+        Frustrated:
+            "Your responses suggest that frustration may be affecting you. Taking a short break and identifying what you can control may help.",
+
+        Overwhelmed:
+            "Your responses suggest that you may be feeling overloaded. Focus on one manageable task at a time and allow yourself time to rest."
+
+    };
+
+
+    return (
+        messages[mood] ||
+        "Thank you for sharing how you feel. Continue checking in with yourself regularly."
+    );
+
+}
+
+
+// ============================================================
+// EXTRACT AI RESPONSE
+// ============================================================
+
+function extractAIData(data) {
+
+    const analysis =
+        data?.analysis ||
+        data?.result ||
+        data?.response ||
+        data?.message ||
+        data?.text ||
+        data?.data?.analysis ||
+        data?.data?.result ||
+        data?.data?.response ||
+        "";
+
+    const emotion =
+        data?.emotion ||
+        data?.data?.emotion ||
+        "Not available";
+
+    const sentiment =
+        data?.sentiment ||
+        data?.data?.sentiment ||
+        "Not available";
+
+    const risk =
+        data?.riskLevel ||
+        data?.risk ||
+        data?.data?.riskLevel ||
+        data?.data?.risk ||
+        "";
+
+    return {
+        analysis,
+        emotion,
+        sentiment,
+        risk
+    };
+
+}
+
+
+// ============================================================
+// SAVE LOCAL HISTORY
+// ============================================================
 
 function getMoodHistory() {
 
@@ -191,7 +934,7 @@ function getMoodHistory() {
     } catch (error) {
 
         console.error(
-            "MOOD HISTORY READ ERROR:",
+            "HISTORY READ ERROR:",
             error
         );
 
@@ -216,7 +959,7 @@ function saveMoodHistory(history) {
     } catch (error) {
 
         console.error(
-            "MOOD HISTORY SAVE ERROR:",
+            "HISTORY SAVE ERROR:",
             error
         );
 
@@ -227,804 +970,93 @@ function saveMoodHistory(history) {
 }
 
 
-// ============================================
-// SAVE ONE MOOD ENTRY
-// ============================================
+// ============================================================
+// SAVE ONE ENTRY
+// ============================================================
 
 function saveMoodEntry(entry) {
 
     const history =
         getMoodHistory();
 
-
     history.push(entry);
 
-
-    // Keep latest 100 entries
     const limitedHistory =
         history.slice(-100);
-
 
     saveMoodHistory(
         limitedHistory
     );
 
-
-    console.log(
-        "MOOD SAVED LOCALLY:",
-        entry
-    );
-
 }
 
 
-// ============================================
-// ESCAPE HTML
-// ============================================
-
-function escapeHTML(value) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        String(value ?? "");
-
-    return div.innerHTML;
-
-}
-
-
-// ============================================
-// FIND JOURNAL TEXTAREA
-// ============================================
-
-function getJournalElement() {
-
-    const possibleIds = [
-
-        "journalText",
-
-        "journalEntry",
-
-        "moodText",
-
-        "journal",
-
-        "entry",
-
-        "moodEntry",
-
-        "journalTextarea"
-
-    ];
-
-
-    for (
-        const id of possibleIds
-    ) {
-
-        const element =
-            document.getElementById(id);
-
-
-        if (element) {
-
-            return element;
-
-        }
-
-    }
-
-
-    // Fallback: first textarea
-    return document.querySelector(
-        "textarea"
-    );
-
-}
-
-
-// ============================================
-// FIND ANALYZE BUTTON
-// ============================================
-
-function getAnalyzeButton() {
-
-    const possibleIds = [
-
-        "analyzeMoodBtn",
-
-        "analyzeBtn",
-
-        "saveMoodBtn",
-
-        "analyzeSaveBtn"
-
-    ];
-
-
-    for (
-        const id of possibleIds
-    ) {
-
-        const button =
-            document.getElementById(id);
-
-
-        if (button) {
-
-            return button;
-
-        }
-
-    }
-
-
-    // Find button by text
-    const buttons =
-        document.querySelectorAll(
-            "button"
-        );
-
-
-    for (
-        const button of buttons
-    ) {
-
-        const text =
-            button.textContent
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            text.includes("analyze") &&
-            text.includes("mood")
-        ) {
-
-            return button;
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-// ============================================
-// FIND RESULT ELEMENT
-// ============================================
-
-function getResultElement() {
-
-    const possibleIds = [
-
-        "analysisResult",
-
-        "moodAnalysis",
-
-        "analysis",
-
-        "result",
-
-        "aiResult",
-
-        "moodResult"
-
-    ];
-
-
-    for (
-        const id of possibleIds
-    ) {
-
-        const element =
-            document.getElementById(id);
-
-
-        if (element) {
-
-            return element;
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-// ============================================
-// SHOW STATUS
-// ============================================
-
-function showStatus(
-    message,
-    type = "info"
-) {
-
-    let status =
-        document.getElementById(
-            "moodStatus"
-        );
-
-
-    if (!status) {
-
-        status =
-            document.createElement(
-                "div"
-            );
-
-        status.id =
-            "moodStatus";
-
-        status.style.marginTop =
-            "15px";
-
-        status.style.padding =
-            "12px";
-
-        status.style.borderRadius =
-            "10px";
-
-        status.style.textAlign =
-            "center";
-
-        const button =
-            getAnalyzeButton();
-
-
-        if (button) {
-
-            button.parentNode
-                .insertBefore(
-                    status,
-                    button.nextSibling
-                );
-
-        } else {
-
-            document.body.appendChild(
-                status
-            );
-
-        }
-
-    }
-
-
-    status.textContent =
-        message;
-
-
-    if (type === "success") {
-
-        status.style.color =
-            "#16803c";
-
-        status.style.background =
-            "#eaf8ef";
-
-    } else if (type === "error") {
-
-        status.style.color =
-            "#c62828";
-
-        status.style.background =
-            "#fdecec";
-
-    } else {
-
-        status.style.color =
-            "#555";
-
-        status.style.background =
-            "#f3f3f3";
-
-    }
-
-}
-
-
-// ============================================
-// SHOW ANALYSIS
-// ============================================
-
-function showAnalysis(
-    analysis
+// ============================================================
+// DISPLAY RESULT
+// ============================================================
+
+function showResult(
+    mood,
+    score,
+    wellness,
+    aiData
 ) {
 
     const result =
-        getResultElement();
+        getElement("result");
+
+    result.classList.add("show");
+
+    getElement("resultMood")
+        .textContent =
+        mood;
+
+    getElement("resultScore")
+        .textContent =
+        `${score} / ${currentQuestions.length * 3}`;
+
+    const riskElement =
+        getElement("resultRisk");
+
+    riskElement.textContent =
+        aiData.risk ||
+        wellness.level;
+
+    riskElement.className =
+        "result-value " +
+        wellness.className;
 
 
-    if (!result) {
+    getElement("resultEmotion")
+        .textContent =
+        aiData.emotion ||
+        "Not available";
 
-        console.log(
-            "AI ANALYSIS:",
-            analysis
-        );
+    getElement("resultSentiment")
+        .textContent =
+        aiData.sentiment ||
+        "Not available";
 
-        return;
-
-    }
-
-
-    result.style.display =
-        "block";
-
-
-    result.innerHTML = `
-        <div class="mood-analysis-box">
-
-            <h3>
-                🧠 AI Mood Analysis
-            </h3>
-
-            <p>
-                ${escapeHTML(analysis)}
+    getElement("aiInsight")
+        .innerHTML = `
+            <strong>MindCare AI Insight:</strong>
+            <p style="margin-top:8px;">
+                ${escapeHTML(
+                    aiData.analysis
+                )}
             </p>
-
-        </div>
-    `;
+        `;
 
 }
 
 
-// ============================================
-// GET SELECTED MOOD
-// ============================================
-
-function getSelectedMood() {
-
-    if (selectedMood) {
-
-        return selectedMood;
-
-    }
-
-
-    const selected =
-        document.querySelector(
-            ".mood-card.selected, " +
-            ".mood-option.selected, " +
-            ".mood.selected, " +
-            "[data-mood].selected"
-        );
-
-
-    if (selected) {
-
-        return (
-            selected.dataset.mood ||
-            selected.getAttribute(
-                "data-mood"
-            ) ||
-            selected.textContent.trim()
-        );
-
-    }
-
-
-    return "";
-
-}
-
-
-// ============================================
-// SELECT MOOD
-// ============================================
-
-function selectMood(
-    element
-) {
-
-    const allMoodCards =
-        document.querySelectorAll(
-            "[data-mood]"
-        );
-
-
-    allMoodCards.forEach(
-        card => {
-
-            card.classList.remove(
-                "selected"
-            );
-
-        }
-    );
-
-
-    element.classList.add(
-        "selected"
-    );
-
-
-    selectedMood =
-        element.dataset.mood ||
-        element.getAttribute(
-            "data-mood"
-        ) ||
-        element.textContent.trim();
-
-
-    console.log(
-        "SELECTED MOOD:",
-        selectedMood
-    );
-
-}
-
-
-// ============================================
-// SET UP MOOD CARDS
-// ============================================
-
-function setupMoodCards() {
-
-    const cards =
-        document.querySelectorAll(
-            "[data-mood]"
-        );
-
-
-    console.log(
-        "MOOD CARDS FOUND:",
-        cards.length
-    );
-
-
-    cards.forEach(
-        card => {
-
-            card.addEventListener(
-                "click",
-                function () {
-
-                    selectMood(
-                        this
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    // Support cards that use
-    // mood name text instead of data-mood
-    if (cards.length === 0) {
-
-        const possibleCards =
-            document.querySelectorAll(
-                ".mood-card, .mood-option"
-            );
-
-
-        possibleCards.forEach(
-            card => {
-
-                card.addEventListener(
-                    "click",
-                    function () {
-
-                        const name =
-                            this.querySelector(
-                                "h3, h4, .mood-name, span"
-                            );
-
-
-                        selectedMood =
-                            name
-                                ? name.textContent.trim()
-                                : this.textContent.trim();
-
-
-                        possibleCards.forEach(
-                            item =>
-                                item.classList.remove(
-                                    "selected"
-                                )
-                        );
-
-
-                        this.classList.add(
-                            "selected"
-                        );
-
-
-                        console.log(
-                            "SELECTED MOOD:",
-                            selectedMood
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-// ============================================
-// ANALYZE MOOD USING BACKEND
-// ============================================
-
-async function analyzeMoodWithAI(
-    mood,
-    journalText
-) {
-
-    console.log(
-        "SENDING MOOD ANALYSIS..."
-    );
-
-
-    console.log(
-        "MOOD:",
-        mood
-    );
-
-
-    console.log(
-        "JOURNAL:",
-        journalText
-    );
-
-
-    const token =
-        getToken();
-
-
-    const headers = {
-
-        "Content-Type":
-            "application/json"
-
-    };
-
-
-    if (token) {
-
-        headers.Authorization =
-            "Bearer " + token;
-
-    }
-
-
-    const response =
-        await fetch(
-            MOOD_ANALYZE_URL,
-            {
-
-                method: "POST",
-
-                headers: headers,
-
-                body: JSON.stringify({
-
-                    mood: mood,
-
-                    text: journalText,
-
-                    journal: journalText,
-
-                    journalText: journalText
-
-                })
-
-            }
-        );
-
-
-    console.log(
-        "MOOD ANALYSIS STATUS:",
-        response.status
-    );
-
-
-    if (!response.ok) {
-
-        const errorText =
-            await response.text();
-
-
-        console.error(
-            "MOOD AI SERVER ERROR:",
-            errorText
-        );
-
-
-        throw new Error(
-            "AI analysis failed: " +
-            response.status
-        );
-
-    }
-
-
-    const data =
-        await response.json();
-
-
-    console.log(
-        "MOOD AI RESPONSE:",
-        data
-    );
-
-
-    const analysis =
-        data.analysis ||
-        data.result ||
-        data.response ||
-        data.message ||
-        data.text ||
-        data.data?.analysis ||
-        data.data?.result ||
-        data.data?.response;
-
-
-    if (!analysis) {
-
-        throw new Error(
-            "AI returned no analysis."
-        );
-
-    }
-
-
-    return analysis;
-
-}
-
-
-// ============================================
-// FALLBACK ANALYSIS
-// ============================================
-
-function createFallbackAnalysis(
-    mood,
-    journalText
-) {
-
-    const lower =
-        (
-            mood +
-            " " +
-            journalText
-        ).toLowerCase();
-
-
-    if (
-        lower.includes("scared") ||
-        lower.includes("fear") ||
-        lower.includes("afraid")
-    ) {
-
-        return (
-            "It sounds like you may be experiencing fear or worry. " +
-            "Take a moment to breathe slowly and give yourself " +
-            "some time to feel safe and comfortable."
-        );
-
-    }
-
-
-    if (
-        lower.includes("sad") ||
-        lower.includes("lonely") ||
-        lower.includes("alone")
-    ) {
-
-        return (
-            "You seem to be going through a difficult emotional moment. " +
-            "Try reaching out to someone you trust and give yourself " +
-            "permission to process your feelings."
-        );
-
-    }
-
-
-    if (
-        lower.includes("angry") ||
-        lower.includes("frustrated")
-    ) {
-
-        return (
-            "It sounds like something is frustrating you. " +
-            "Taking a short break, breathing slowly, and identifying " +
-            "what is causing the frustration may help."
-        );
-
-    }
-
-
-    if (
-        lower.includes("stress") ||
-        lower.includes("overwhelmed") ||
-        lower.includes("anxious")
-    ) {
-
-        return (
-            "You may be feeling stressed or overwhelmed. " +
-            "Try focusing on one small task at a time and take " +
-            "a few slow breaths."
-        );
-
-    }
-
-
-    if (
-        lower.includes("happy") ||
-        lower.includes("excited") ||
-        lower.includes("grateful")
-    ) {
-
-        return (
-            "Your entry shows some positive feelings. " +
-            "Take a moment to appreciate what is going well " +
-            "and continue the activities that support your wellbeing."
-        );
-
-    }
-
-
-    return (
-        "Thank you for sharing how you feel. " +
-        "Your mood has been saved. Keep checking in with yourself " +
-        "and notice how your emotions change over time."
-    );
-
-}
-
-
-// ============================================
-// ANALYZE AND SAVE MOOD
-// ============================================
+// ============================================================
+// ANALYZE AND SAVE
+// ============================================================
 
 async function analyzeAndSaveMood() {
 
-    const journalElement =
-        getJournalElement();
-
-
-    const button =
-        getAnalyzeButton();
-
-
-    if (!journalElement) {
-
-        showStatus(
-            "Journal text area not found.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const journalText =
-        journalElement.value.trim();
-
-
-    const mood =
-        getSelectedMood();
-
-
-    if (!mood) {
+    if (!selectedMood) {
 
         showStatus(
             "Please select a mood first.",
@@ -1036,10 +1068,15 @@ async function analyzeAndSaveMood() {
     }
 
 
-    if (!journalText) {
+    if (
+        questionAnswers.length === 0 ||
+        questionAnswers.some(
+            answer => answer === null
+        )
+    ) {
 
         showStatus(
-            "Please write something about your day.",
+            "Please complete all questionnaire questions.",
             "error"
         );
 
@@ -1048,13 +1085,21 @@ async function analyzeAndSaveMood() {
     }
 
 
+    const journalElement =
+        getJournalElement();
+
+    const journalText =
+        journalElement
+            ? journalElement.value.trim()
+            : "";
+
+
+    const button =
+        getElement("analyzeBtn");
+
     if (button) {
 
-        button.disabled =
-            true;
-
-        button.dataset.originalText =
-            button.textContent;
+        button.disabled = true;
 
         button.textContent =
             "Analyzing...";
@@ -1063,51 +1108,91 @@ async function analyzeAndSaveMood() {
 
 
     showStatus(
-        "Analyzing your mood...",
+        "MindCare AI is analyzing your responses...",
         "info"
     );
 
 
-    let analysis = "";
+    const score =
+        calculateScore();
 
-    let aiWorked = true;
+    const wellness =
+        calculateWellnessLevel();
+
+
+    let aiData = {
+
+        analysis:
+            createFallbackAnalysis(
+                selectedMood,
+                wellness
+            ),
+
+        emotion:
+            selectedMood,
+
+        sentiment:
+            wellness.level,
+
+        risk:
+            wellness.level
+
+    };
+
+
+    let aiWorked = false;
 
 
     try {
 
-        analysis =
+        const backendData =
             await analyzeMoodWithAI(
-                mood,
+                selectedMood,
                 journalText
             );
 
+        const extracted =
+            extractAIData(
+                backendData
+            );
+
+
+        if (extracted.analysis) {
+
+            aiData = {
+
+                analysis:
+                    extracted.analysis,
+
+                emotion:
+                    extracted.emotion,
+
+                sentiment:
+                    extracted.sentiment,
+
+                risk:
+                    extracted.risk ||
+                    wellness.level
+
+            };
+
+            aiWorked = true;
+
+        }
 
     } catch (error) {
-
-        aiWorked = false;
-
 
         console.error(
             "AI ANALYSIS ERROR:",
             error
         );
 
-
-        // Important:
-        // Save the mood even when AI fails.
-
-        analysis =
-            createFallbackAnalysis(
-                mood,
-                journalText
-            );
-
     }
 
 
-    // ========================================
-    // SAVE MOOD LOCALLY
-    // ========================================
+    // ========================================================
+    // SAVE ENTRY
+    // ========================================================
 
     const entry = {
 
@@ -1115,13 +1200,34 @@ async function analyzeAndSaveMood() {
             Date.now(),
 
         mood:
-            mood,
+            selectedMood,
 
         journal:
             journalText,
 
+        questions:
+            currentQuestions,
+
+        answers:
+            questionAnswers,
+
+        questionnaireScore:
+            score,
+
+        maximumScore:
+            currentQuestions.length * 3,
+
+        wellnessLevel:
+            wellness.level,
+
         analysis:
-            analysis,
+            aiData.analysis,
+
+        emotion:
+            aiData.emotion,
+
+        sentiment:
+            aiData.sentiment,
 
         aiAnalyzed:
             aiWorked,
@@ -1135,17 +1241,18 @@ async function analyzeAndSaveMood() {
     };
 
 
-    saveMoodEntry(
-        entry
-    );
+    saveMoodEntry(entry);
 
 
-    // ========================================
-    // DISPLAY RESULT
-    // ========================================
+    // ========================================================
+    // DISPLAY
+    // ========================================================
 
-    showAnalysis(
-        analysis
+    showResult(
+        selectedMood,
+        score,
+        wellness,
+        aiData
     );
 
 
@@ -1159,86 +1266,59 @@ async function analyzeAndSaveMood() {
     } else {
 
         showStatus(
-            "Mood saved successfully. AI analysis was temporarily unavailable, so a basic analysis was provided.",
-            "info"
+            "Mood saved successfully. Basic wellbeing analysis was used because AI was unavailable.",
+            "success"
         );
 
     }
 
 
-    // Update dashboard data
     updateDashboardMoodData();
+
+    loadMoodHistory();
 
 
     if (button) {
 
-        button.disabled =
-            false;
+        button.disabled = false;
 
         button.textContent =
-            button.dataset.originalText ||
-            "Analyze & Save Mood";
+            "🧠 Analyze & Save Mood";
 
     }
 
 }
 
 
-// ============================================
-// DISPLAY MOOD HISTORY
-// ============================================
+// ============================================================
+// HISTORY DISPLAY
+// ============================================================
 
 function loadMoodHistory() {
 
     const history =
         getMoodHistory();
 
+    const container =
+        getElement("moodHistory");
 
-    console.log(
-        "MOOD HISTORY:",
-        history
-    );
-
-
-    // Try multiple possible history containers
-
-    const historyContainer =
-        document.getElementById(
-            "moodHistory"
-        ) ||
-        document.getElementById(
-            "historyContainer"
-        ) ||
-        document.getElementById(
-            "moodHistoryContainer"
-        );
-
-
-    if (!historyContainer) {
-
+    if (!container) {
         return;
-
     }
 
 
-    historyContainer.innerHTML = "";
+    container.innerHTML = "";
 
 
     if (history.length === 0) {
 
-        historyContainer.innerHTML = `
-            <div class="empty-history">
-                <div style="font-size:40px;">
-                    📝
-                </div>
-
-                <h3>
-                    No mood entries yet
-                </h3>
-
-                <p>
-                    Your saved moods will appear here.
-                </p>
+        container.innerHTML = `
+            <div class="empty">
+                📝
+                <br><br>
+                No mood entries yet.
+                <br>
+                Your saved moods will appear here.
             </div>
         `;
 
@@ -1254,148 +1334,121 @@ function loadMoodHistory() {
             .slice(0, 20);
 
 
-    recent.forEach(
-        entry => {
+    recent.forEach(entry => {
 
-            const date =
-                new Date(
-                    entry.date
-                );
-
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "mood-history-card";
-
-
-            card.innerHTML = `
-                <div class="history-header">
-
-                    <strong>
-                        ${escapeHTML(
-                            entry.mood
-                        )}
-                    </strong>
-
-                    <span>
-                        ${date.toLocaleDateString()}
-                    </span>
-
-                </div>
-
-                <p>
-                    ${escapeHTML(
-                        entry.journal
-                    )}
-                </p>
-
-                ${
-                    entry.analysis
-                        ? `
-                        <div class="history-analysis">
-                            <strong>
-                                AI Insight:
-                            </strong>
-
-                            ${escapeHTML(
-                                entry.analysis
-                            )}
-                        </div>
-                        `
-                        : ""
-                }
-
-            `;
-
-
-            historyContainer.appendChild(
-                card
+        const date =
+            new Date(
+                entry.date
             );
 
-        }
-    );
+
+        const item =
+            document.createElement(
+                "div"
+            );
+
+        item.className =
+            "history-item";
+
+
+        item.innerHTML = `
+
+            <div class="history-top">
+
+                <span class="history-mood">
+                    ${escapeHTML(
+                        entry.mood
+                    )}
+                </span>
+
+                <span class="history-date">
+                    ${date.toLocaleDateString()}
+                </span>
+
+            </div>
+
+            <div class="history-text">
+                ${escapeHTML(
+                    entry.journal ||
+                    "No journal entry."
+                )}
+            </div>
+
+            <div class="history-analysis">
+
+                <strong>
+                    Wellness Level:
+                </strong>
+
+                ${escapeHTML(
+                    entry.wellnessLevel ||
+                    "Not available"
+                )}
+
+                <br>
+
+                <strong>
+                    Score:
+                </strong>
+
+                ${escapeHTML(
+                    String(
+                        entry.questionnaireScore ??
+                        "N/A"
+                    )
+                )}
+
+                <br>
+
+                <strong>
+                    AI Insight:
+                </strong>
+
+                ${escapeHTML(
+                    entry.analysis ||
+                    "Not available"
+                )}
+
+            </div>
+        `;
+
+
+        container.appendChild(item);
+
+    });
 
 }
 
 
-// ============================================
-// DELETE ALL MOOD HISTORY
-// ============================================
-
-function clearMoodHistory() {
-
-    const confirmDelete =
-        confirm(
-            "Are you sure you want to delete all your mood history?"
-        );
-
-
-    if (!confirmDelete) {
-
-        return;
-
-    }
-
-
-    localStorage.removeItem(
-        MOOD_STORAGE_KEY
-    );
-
-
-    loadMoodHistory();
-
-
-    updateDashboardMoodData();
-
-
-    showStatus(
-        "Mood history cleared.",
-        "success"
-    );
-
-}
-
-
-// ============================================
-// DASHBOARD MOOD DATA
-// ============================================
+// ============================================================
+// DASHBOARD DATA
+// ============================================================
 
 function getDashboardMoodData() {
 
     const history =
         getMoodHistory();
 
-
     const recent =
         history.slice(-7);
-
 
     const moodCounts = {};
 
 
-    recent.forEach(
-        entry => {
+    recent.forEach(entry => {
 
-            const mood =
-                entry.mood ||
-                "Unknown";
+        const mood =
+            entry.mood ||
+            "Unknown";
 
+        moodCounts[mood] =
+            (moodCounts[mood] || 0) + 1;
 
-            moodCounts[mood] =
-                (moodCounts[mood] || 0) + 1;
-
-        }
-    );
+    });
 
 
     let mostCommonMood =
         "No data";
-
 
     let highest =
         0;
@@ -1442,15 +1495,10 @@ function getDashboardMoodData() {
 }
 
 
-// ============================================
-// MAKE DASHBOARD DATA AVAILABLE
-// ============================================
-
 function updateDashboardMoodData() {
 
     const data =
         getDashboardMoodData();
-
 
     localStorage.setItem(
         "mindcare_dashboard_mood_data",
@@ -1458,13 +1506,6 @@ function updateDashboardMoodData() {
     );
 
 
-    console.log(
-        "DASHBOARD MOOD DATA:",
-        data
-    );
-
-
-    // Allow dashboard.js to use it
     window.dispatchEvent(
         new CustomEvent(
             "mindcareMoodUpdated",
@@ -1477,41 +1518,54 @@ function updateDashboardMoodData() {
 }
 
 
-// ============================================
+// ============================================================
 // INITIALIZE
-// ============================================
+// ============================================================
 
 function initializeMoodPage() {
 
     console.log(
-        "INITIALIZING MOOD PAGE..."
+        "INITIALIZING MINDCARE MOOD PAGE..."
     );
 
 
     setupMoodCards();
 
 
-    const analyzeButton =
-        getAnalyzeButton();
+    const nextBtn =
+        getElement("nextBtn");
 
+    if (nextBtn) {
 
-    if (analyzeButton) {
-
-        analyzeButton.addEventListener(
+        nextBtn.addEventListener(
             "click",
-            function (event) {
-
-                event.preventDefault();
-
-                analyzeAndSaveMood();
-
-            }
+            nextQuestion
         );
 
-    } else {
+    }
 
-        console.warn(
-            "Analyze & Save Mood button not found."
+
+    const previousBtn =
+        getElement("previousBtn");
+
+    if (previousBtn) {
+
+        previousBtn.addEventListener(
+            "click",
+            previousQuestion
+        );
+
+    }
+
+
+    const analyzeBtn =
+        getElement("analyzeBtn");
+
+    if (analyzeBtn) {
+
+        analyzeBtn.addEventListener(
+            "click",
+            analyzeAndSaveMood
         );
 
     }
@@ -1519,37 +1573,19 @@ function initializeMoodPage() {
 
     loadMoodHistory();
 
-
     updateDashboardMoodData();
 
 
-    // Clear history button
-    const clearButton =
-        document.getElementById(
-            "clearMoodHistoryBtn"
-        );
-
-
-    if (clearButton) {
-
-        clearButton.addEventListener(
-            "click",
-            clearMoodHistory
-        );
-
-    }
-
-
     console.log(
-        "MOOD PAGE READY"
+        "MINDCARE MOOD PAGE READY"
     );
 
 }
 
 
-// ============================================
+// ============================================================
 // START
-// ============================================
+// ============================================================
 
 if (
     document.readyState ===
@@ -1568,9 +1604,9 @@ if (
 }
 
 
-// ============================================
+// ============================================================
 // GLOBAL FUNCTIONS
-// ============================================
+// ============================================================
 
 window.getMoodHistory =
     getMoodHistory;
@@ -1581,11 +1617,11 @@ window.saveMoodHistory =
 window.loadMoodHistory =
     loadMoodHistory;
 
-window.clearMoodHistory =
-    clearMoodHistory;
-
 window.getDashboardMoodData =
     getDashboardMoodData;
 
 window.analyzeAndSaveMood =
     analyzeAndSaveMood;
+
+window.calculateScore =
+    calculateScore;

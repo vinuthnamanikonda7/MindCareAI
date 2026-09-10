@@ -77,11 +77,11 @@
         .page-header h1 {
             font-size: 30px;
             margin-bottom: 8px;
-            color: #222;
         }
 
         .page-header p {
             color: #777;
+            line-height: 1.6;
         }
 
         .card {
@@ -96,6 +96,8 @@
             margin-bottom: 20px;
             color: #333;
         }
+
+        /* MOODS */
 
         .mood-grid {
             display: grid;
@@ -122,6 +124,7 @@
         .mood-option.selected {
             border-color: #6257ff;
             background: #f0edff;
+            box-shadow: 0 4px 15px rgba(98,87,255,0.15);
         }
 
         .mood-emoji {
@@ -133,6 +136,148 @@
         .mood-name {
             font-weight: 600;
             color: #555;
+        }
+
+        /* QUESTIONNAIRE */
+
+        .questionnaire {
+            display: none;
+            margin-top: 25px;
+            background: #f8f7ff;
+            border-radius: 18px;
+            padding: 25px;
+        }
+
+        .questionnaire.show {
+            display: block;
+        }
+
+        .questionnaire-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .questionnaire-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .question-count {
+            color: #6257ff;
+            font-weight: 700;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e5e2f5;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #6257ff;
+            transition: width 0.3s ease;
+        }
+
+        .question-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(70,60,120,0.06);
+        }
+
+        .question-number {
+            color: #6257ff;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 19px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .answer-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #ddd;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: white;
+        }
+
+        .answer-option:hover {
+            border-color: #6257ff;
+            background: #f8f7ff;
+        }
+
+        .answer-option.selected {
+            border-color: #6257ff;
+            background: #eeeaff;
+        }
+
+        .answer-option input {
+            accent-color: #6257ff;
+            width: 18px;
+            height: 18px;
+        }
+
+        .question-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .question-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 25px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .previous-btn {
+            background: #e9e9ef;
+            color: #444;
+        }
+
+        .next-btn {
+            background: #6257ff;
+            color: white;
+            margin-left: auto;
+        }
+
+        .next-btn:hover {
+            background: #5147e8;
+        }
+
+        /* JOURNAL */
+
+        .journal-section {
+            display: none;
+        }
+
+        .journal-section.show {
+            display: block;
         }
 
         textarea {
@@ -174,6 +319,8 @@
             cursor: not-allowed;
         }
 
+        /* RESULT */
+
         .result {
             display: none;
             margin-top: 25px;
@@ -189,8 +336,9 @@
         .result-row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #e5e2f5;
+            gap: 15px;
         }
 
         .result-row:last-child {
@@ -199,6 +347,37 @@
 
         .result-label {
             font-weight: 600;
+        }
+
+        .result-value {
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .risk-low {
+            color: #198754;
+        }
+
+        .risk-moderate {
+            color: #d98b00;
+        }
+
+        .risk-high {
+            color: #dc3545;
+        }
+
+        .risk-critical {
+            color: #9b1c1c;
+        }
+
+        .disclaimer {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #fff8e1;
+            color: #6b5b00;
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .message {
@@ -215,6 +394,8 @@
         .error {
             color: #dc3545;
         }
+
+        /* HISTORY */
 
         .history-item {
             border-left: 4px solid #6257ff;
@@ -244,6 +425,13 @@
             line-height: 1.5;
         }
 
+        .history-analysis {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            color: #555;
+        }
+
         .empty {
             text-align: center;
             color: #888;
@@ -253,6 +441,10 @@
         @media (max-width: 700px) {
             .navbar {
                 padding: 0 4%;
+            }
+
+            .brand {
+                font-size: 19px;
             }
 
             .nav-links a {
@@ -266,6 +458,12 @@
 
             .container {
                 width: 94%;
+            }
+
+            .questionnaire-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
             }
         }
     </style>
@@ -289,117 +487,180 @@
     <section class="page-header">
         <h1>How are you feeling today?</h1>
         <p>
-            Record your mood and journal. MindCare AI will analyze
-            your emotional state and save your progress.
+            Select the emoji that best describes your current feeling.
+            MindCare AI will ask a few questions to understand your emotional wellbeing.
         </p>
     </section>
 
     <section class="card">
 
-        <h2>Select Your Mood</h2>
+        <h2>😊 Select Your Mood</h2>
 
         <div class="mood-grid">
 
-    <button type="button" class="mood-option" data-mood="Happy">
-        <span class="mood-emoji">😊</span>
-        <span class="mood-name">Happy</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Happy">
+                <span class="mood-emoji">😊</span>
+                <span class="mood-name">Happy</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Excited">
-        <span class="mood-emoji">🤩</span>
-        <span class="mood-name">Excited</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Excited">
+                <span class="mood-emoji">🤩</span>
+                <span class="mood-name">Excited</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Calm">
-        <span class="mood-emoji">😌</span>
-        <span class="mood-name">Calm</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Calm">
+                <span class="mood-emoji">😌</span>
+                <span class="mood-name">Calm</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Loved">
-        <span class="mood-emoji">🥰</span>
-        <span class="mood-name">Loved</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Loved">
+                <span class="mood-emoji">🥰</span>
+                <span class="mood-name">Loved</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Grateful">
-        <span class="mood-emoji">🙏</span>
-        <span class="mood-name">Grateful</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Grateful">
+                <span class="mood-emoji">🙏</span>
+                <span class="mood-name">Grateful</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Confident">
-        <span class="mood-emoji">😎</span>
-        <span class="mood-name">Confident</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Confident">
+                <span class="mood-emoji">😎</span>
+                <span class="mood-name">Confident</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Neutral">
-        <span class="mood-emoji">😐</span>
-        <span class="mood-name">Neutral</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Neutral">
+                <span class="mood-emoji">😐</span>
+                <span class="mood-name">Neutral</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Tired">
-        <span class="mood-emoji">😴</span>
-        <span class="mood-name">Tired</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Tired">
+                <span class="mood-emoji">😴</span>
+                <span class="mood-name">Tired</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Bored">
-        <span class="mood-emoji">🥱</span>
-        <span class="mood-name">Bored</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Bored">
+                <span class="mood-emoji">🥱</span>
+                <span class="mood-name">Bored</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Confused">
-        <span class="mood-emoji">😕</span>
-        <span class="mood-name">Confused</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Confused">
+                <span class="mood-emoji">😕</span>
+                <span class="mood-name">Confused</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Worried">
-        <span class="mood-emoji">😟</span>
-        <span class="mood-name">Worried</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Worried">
+                <span class="mood-emoji">😟</span>
+                <span class="mood-name">Worried</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Anxious">
-        <span class="mood-emoji">😰</span>
-        <span class="mood-name">Anxious</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Anxious">
+                <span class="mood-emoji">😰</span>
+                <span class="mood-name">Anxious</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Sad">
-        <span class="mood-emoji">😔</span>
-        <span class="mood-name">Sad</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Sad">
+                <span class="mood-emoji">😔</span>
+                <span class="mood-name">Sad</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Lonely">
-        <span class="mood-emoji">🥺</span>
-        <span class="mood-name">Lonely</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Lonely">
+                <span class="mood-emoji">🥺</span>
+                <span class="mood-name">Lonely</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Angry">
-        <span class="mood-emoji">😠</span>
-        <span class="mood-name">Angry</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Angry">
+                <span class="mood-emoji">😠</span>
+                <span class="mood-name">Angry</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Stressed">
-        <span class="mood-emoji">😣</span>
-        <span class="mood-name">Stressed</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Stressed">
+                <span class="mood-emoji">😣</span>
+                <span class="mood-name">Stressed</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Frustrated">
-        <span class="mood-emoji">😤</span>
-        <span class="mood-name">Frustrated</span>
-    </button>
+            <button type="button" class="mood-option" data-mood="Frustrated">
+                <span class="mood-emoji">😤</span>
+                <span class="mood-name">Frustrated</span>
+            </button>
 
-    <button type="button" class="mood-option" data-mood="Overwhelmed">
-        <span class="mood-emoji">😵‍💫</span>
-        <span class="mood-name">Overwhelmed</span>
-    </button>
-
-</div>
+            <button type="button" class="mood-option" data-mood="Overwhelmed">
+                <span class="mood-emoji">😵‍💫</span>
+                <span class="mood-name">Overwhelmed</span>
+            </button>
 
         </div>
 
-        <h2>Write About Your Day</h2>
+        <!-- QUESTIONNAIRE -->
+
+        <div id="questionnaire" class="questionnaire">
+
+            <div class="questionnaire-header">
+                <h2 id="questionnaireTitle">
+                    Let's understand your mood
+                </h2>
+
+                <span id="questionCount" class="question-count">
+                    Question 1 of 5
+                </span>
+            </div>
+
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+
+            <div class="question-box">
+
+                <div id="questionNumber" class="question-number">
+                    QUESTION 1
+                </div>
+
+                <div id="questionText" class="question-text">
+                    Question will appear here.
+                </div>
+
+                <div id="answerOptions" class="answer-options">
+                </div>
+
+                <div class="question-buttons">
+
+                    <button
+                        type="button"
+                        id="previousBtn"
+                        class="question-btn previous-btn"
+                    >
+                        ← Previous
+                    </button>
+
+                    <button
+                        type="button"
+                        id="nextBtn"
+                        class="question-btn next-btn"
+                    >
+                        Next →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- JOURNAL -->
+
+    <section id="journalSection" class="card journal-section">
+
+        <h2>📝 Tell Us More</h2>
+
+        <p style="color:#777; margin-bottom:15px;">
+            You can describe anything else you would like MindCare AI to know.
+        </p>
 
         <textarea
             id="journalText"
             name="journalText"
-            placeholder="Tell MindCare AI how you are feeling..."
+            placeholder="Write about your day, thoughts, feelings or anything you want to share..."
         ></textarea>
 
         <button
@@ -407,43 +668,78 @@
             id="analyzeBtn"
             class="analyze-btn"
         >
-            Analyze & Save Mood
+            🧠 Analyze & Save Mood
         </button>
 
         <div id="message" class="message"></div>
 
+        <!-- RESULT -->
+
         <div id="result" class="result">
+
+            <h3 style="margin-bottom:15px;">
+                🧠 MindCare AI Wellness Analysis
+            </h3>
 
             <div class="result-row">
                 <span class="result-label">Selected Mood</span>
-                <span id="resultMood">-</span>
+                <span id="resultMood" class="result-value">-</span>
             </div>
 
             <div class="result-row">
-                <span class="result-label">Emotion</span>
-                <span id="resultEmotion">-</span>
+                <span class="result-label">Questionnaire Score</span>
+                <span id="resultScore" class="result-value">-</span>
             </div>
 
             <div class="result-row">
-                <span class="result-label">Sentiment</span>
-                <span id="resultSentiment">-</span>
+                <span class="result-label">Wellness Level</span>
+                <span id="resultRisk" class="result-value">-</span>
             </div>
 
             <div class="result-row">
-                <span class="result-label">Risk Level</span>
-                <span id="resultRisk">-</span>
+                <span class="result-label">AI Emotion</span>
+                <span id="resultEmotion" class="result-value">-</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">AI Sentiment</span>
+                <span id="resultSentiment" class="result-value">-</span>
+            </div>
+
+            <div
+                id="aiInsight"
+                style="
+                    margin-top:18px;
+                    padding:15px;
+                    background:white;
+                    border-radius:10px;
+                    line-height:1.6;
+                "
+            >
+            </div>
+
+            <div class="disclaimer">
+                <strong>Important:</strong>
+                This result is intended for wellbeing and screening support only.
+                It is not a medical diagnosis. If you are experiencing serious
+                distress or feel unsafe, please contact a qualified mental-health
+                professional or local emergency service.
             </div>
 
         </div>
 
     </section>
 
+    <!-- HISTORY -->
+
     <section class="card">
 
-        <h2>Your Recent Mood History</h2>
+        <h2>📊 Your Recent Mood History</h2>
 
         <div id="moodHistory">
-            <div class="empty">Loading your mood history...</div>
+            <div class="empty">
+                Loading your mood history...
+            </div>
         </div>
 
     </section>
